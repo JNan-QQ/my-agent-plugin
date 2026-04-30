@@ -1,0 +1,6 @@
+[submodule "test-team"]
+	path = test-team
+	url = https://gitee.com/my-agent-skill/test-team.git
+[submodule "init-playwright-test"]
+	path = init-playwright-test
+	url = https://gitee.com/my-agent-skill/init-playwright-test.git

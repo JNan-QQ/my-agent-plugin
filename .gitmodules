@@ -4,3 +4,6 @@
 [submodule "init-playwright-test"]
 	path = init-playwright-test
 	url = https://gitee.com/my-agent-skill/init-playwright-test.git
+[submodule "dify-workflow-check"]
+	path = dify-workflow-check
+	url = https://gitee.com/my-agent-skill/dify-workflow-check.git

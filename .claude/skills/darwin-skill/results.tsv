@@ -1,0 +1,33 @@
+timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
+2026-06-02T00:00	baseline	test-team	-	79.5	baseline	-	初始评估：dim4检查点(7)、dim3失败格式(8)、dim8实测(7/dry_run)	dry_run
+2026-06-02T10:30	d5e5980	test-team	79.5	81.9	keep	dim4	补充阶段6 COMPLETE CHECKPOINT	full_test
+2026-06-02T10:31	8ff9697	test-team	81.9	83.1	keep	dim3	失败模式升级为三段式 if-then	full_test
+2026-06-02T10:32	1f60a22	test-team	83.1	84.3	keep	dim7	变量解析改为分类表格	full_test
+2026-06-02T10:33	35e996c	test-team	84.3	85.5	keep	dim2	路由逻辑改为扁平匹配表	full_test
+2026-06-02T10:34	036194e	test-team	85.5	86.1	keep	dim9	补充典型错误输出示例	full_test
+2026-06-02T10:35	-	test-team	86.1	87.2	keep	dim8	实测prompt1成功(24需求+7风险)，路由Glob路径敏感	full_test
+2026-06-02T10:40	6d0afda	test-team	87.2	87.8	keep	dim8	补充Glob路径规则：必须用path=CWD	full_test
+2026-06-02T10:45	06df84a	test-team	87.8	88.3	keep	dim8	Glob模式改为**/前缀，路由测试通过	full_test
+2026-06-02T10:50	-	test-team	88.3	88.3	skip	dim1/dim5	无残余软化措辞，无需修改	-
+2026-06-02T11:00	2565991	test-team	88.3	90.5	keep	dim5/dim8	修复所有reference的Glob **/前缀+消除runtime-specific措辞	full_test
+2026-06-02T11:10	a3daa28	test-team	90.5	94.1	keep	dim4	阶段1补充结果确认检查点，突破结构性上限	full_test
+2026-06-02T14:00	re-eval	test-team	94.1	88.9	baseline	dim8	独立子agent重评：dim5=9(dim8=8/dry_run)，比自评偏低	dry_run
+2026-06-02T15:00	e2f4715	test-team	88.9	82.8	keep	dim3/dim8	丰富1-analyze-req+3-write-cases：去重规则+步骤预期规范；实测阶段1(27需求)+阶段3(16用例零雷同)	full_test
+2026-06-02T16:00	1036ea9	test-team	82.8	-	keep	dim3/dim5	优化阶段2/4评审质量：引用原文+问题分级+评审意见模板；实测阶段2评审报告质量优秀	full_test
+2026-06-02T16:30	baseline	init-playwright-test	-	65.8	baseline	-	初始评估：dim9反例(2)、dim4检查点(4)、dim3失败模式(5)	dry_run
+2026-06-02T16:35	06b4e1f	init-playwright-test	65.8	69.4	keep	dim9	补充10条禁止操作+4条危险信号	dry_run
+2026-06-02T16:40	85d7a0b	init-playwright-test	69.4	74.2	keep	dim3	补充 Step 1/2/6 失败模式分支表（if-then 三段式）	dry_run
+2026-06-02T16:45	9cfb41d	init-playwright-test	74.2	76.6	keep	dim4	补充 Step 3/7 显性检查点（🔴 CHECKPOINT）	dry_run
+2026-06-02T16:50	f8efefe	init-playwright-test	76.6	80.0	keep	dim5	补充 Step 3/5 合并判断逻辑（grep 检查）和示例	dry_run
+2026-06-02T16:55	e5dade7	init-playwright-test	80.0	81.4	keep	dim1	补充 Frontmatter 触发词列表	dry_run
+2026-06-02T17:00	78af4a7	init-playwright-test	81.4	82.6	keep	dim7	关键设计决策精简为表格形式	dry_run
+2026-06-02T18:00	629ddac	init-playwright-test	82.6	79.8	fix	dim3/dim5/dim8	修复致命缺陷：Step 2/3 覆盖问题+__init__.py+PowerShell 兼容	full_test
+2026-06-02T18:30	re-test	init-playwright-test	79.8	82.6	keep	dim8	修复验证：Prompt1=8.0(+1.5)、Prompt2=7.0(+3.0)、Prompt3=6.0(-1.0)、avg=7.0	full_test
+2026-06-02T14:30	baseline	dify-workflow-check	-	63.1	baseline	-	初始评估：dim4检查点(3)、dim9反例(2)、dim3失败模式(5)	dry_run
+2026-06-02T14:35	3042a1f	dify-workflow-check	63.1	66.7	keep	dim9	补充7条反例+3条危险信号	dry_run
+2026-06-02T14:40	413d86c	dify-workflow-check	66.7	69.1	keep	dim4	补充 Phase 1/5 显性检查点（🔴 CHECKPOINT）	dry_run
+2026-06-02T14:45	518ac68	dify-workflow-check	69.1	72.7	keep	dim3	错误处理升级为 if-then 三段式（8行）	dry_run
+2026-06-02T14:50	27aa8f3	dify-workflow-check	72.7	74.4	keep	dim5	补充 Phase 1/5 具体汇报格式	dry_run
+2026-06-02T14:55	5db4e08	dify-workflow-check	74.4	75.6	keep	dim2	Phase 2b prompt 精简为模块化结构	dry_run
+2026-06-02T15:00	-	dify-workflow-check	75.6	79.8	keep	dim8	实测 Prompt 1：完整流程执行成功，23节点/4分支/1info，报告结构化	full_test
+2026-06-02T15:05	0041c31	dify-workflow-check	80.2	80.8	keep	dim4	补充 Phase 2b 后检查点	dry_run

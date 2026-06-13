@@ -36,3 +36,4 @@ timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
 2026-06-13T23:55	bb438e9	test-team	87.2	88.9	keep	dim8	增强可行性评分细则：Prompt2=8.5(+0.5), 可行性30→75分, 封驳原因明确	full_test
 2026-06-14T00:15	6752c26	test-team	88.9	91.2	keep	dim8	阶段1优化：测试维度选择+图片分析+需求拆分优化，4个REQ按业务场景划分	full_test
 2026-06-14T15:10	full-test	test-team	91.2	86.8	baseline	dim8	真实测试阶段1-4：合并率33%<50%, 场景覆盖66.7%<70%	full_test
+2026-06-14T16:00	full-test	test-team	86.8	87.95	keep	dim8	真实测试阶段1-4：场景覆盖100%，需求覆盖100%，阶段2封驳（可行性76分）	full_test

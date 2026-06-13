@@ -102,6 +102,7 @@ description: 测试团队6阶段工作流技能：需求分析→需求评审→
 | `{TEST_DIMENSIONS}` | 测试维度选择（如"功能+性能"） |
 | `{IMAGE_ANALYSIS}` | 是否分析需求文档图片（是/否） |
 | `{USER_CONFIRMATIONS}` | 用户对模糊风险功能点的确认标准 |
+| `{CASE_CONTROL}` | 用例数量控制（精简/保留） |
 
 ## Dispatch 模板
 
@@ -177,21 +178,34 @@ Agent({
 
 ### 阶段 3 PREPARE
 
+#### 3.1 用例数量预估
+
+🔴 CHECKPOINT · 展示用例数量预估，**询问用户确认**：
+
+> 用例数量预估：
+> - 功能需求：N条
+> - 预估用例：M条（简单需求3-5条，中等需求5-8条，复杂需求8-12条）
+> - 平均每需求：M/N条
+>
+> 是否需要精简用例？（输入"精简"或"保留"）
+
+#### 3.2 需求分组
+
 ```
 Agent({
   description: "阶段3准备：需求分组",
-  prompt: "你是测试团队的用例设计师。\n读取 `{SKILL_DIR}/references/3-write-cases.md`。\n工作目录：{CWD}\n需求文档：{REQ_PATH}\n评审报告（封驳后必填，否则空）：{REVIEW_PATH}\n任务：按功能模块分组（每组10-15条需求），不生成用例。\n输出JSON：{\"stage\":3,\"summary\":\"N条需求分M组\",\"groups\":[{\"group\":1,\"reqs\":[\"F001\"],\"summary\":\"模块名\"}],\"total_reqs\":N,\"output_path\":\"test-output/test-cases/TC-YYYYMMDD-HHMM.json\"}"
+  prompt: "你是测试团队的用例设计师。\n读取 `{SKILL_DIR}/references/3-write-cases.md`。\n工作目录：{CWD}\n需求文档：{REQ_PATH}\n评审报告（封驳后必填，否则空）：{REVIEW_PATH}\n用例数量控制：{CASE_CONTROL}\n任务：按功能模块分组（每组10-15条需求），不生成用例。\n输出JSON：{\"stage\":3,\"summary\":\"N条需求分M组\",\"groups\":[{\"group\":1,\"reqs\":[\"F001\"],\"summary\":\"模块名\",\"estimated_cases\":5}],\"total_reqs\":N,\"total_estimated_cases\":M,\"output_path\":\"test-output/test-cases/TC-YYYYMMDD-HHMM.json\"}"
 })
 ```
 
-🔴 CHECKPOINT · 展示分组清单 → **用户确认** → 逐组派COMPLETE
+🔴 CHECKPOINT · 展示分组清单+用例预估 → **用户确认** → 逐组派COMPLETE
 
 ### 阶段 3 COMPLETE（分批循环）
 
 ```
 Agent({
   description: "阶段3完成：生成第{BATCH}/{TOTAL}批用例",
-  prompt: "你是测试团队的用例设计师。\n读取 `{SKILL_DIR}/references/3-write-cases.md`，其中包含去重规则、步骤写法规范、预期结果写法规范。\n工作目录：{CWD}\n需求文档：{REQ_PATH}\n评审报告：{REVIEW_PATH}\n只为以下需求生成用例（第{BATCH}/{TOTAL}批）：{REQ_IDS}\n\n质量要求（生成前逐条检查）：\n1. 去重：每条用例有唯一测试点，对比 title 不得雷同\n2. 步骤：每步一个操作，动词+对象+具体数据（如 `输入用户名 \\\"admin\\\"`）\n3. 预期：可验证——包含具体页面元素/文字/数值，禁用\"成功\"\"正常\"等模糊词\n4. 覆盖：每需求至少 正常+异常+边界 三类\n\nJSON 格式规则：\n1. 纯 JSON 数组 [{...}, {...}]\n2. 双引号转义为 \\\"\n3. 换行用 \\n\n用 Write 工具写入：{CWD}/test-output/.tmp/tc-batch-{BATCH}.json\n编号从 TC{BATCH_START} 开始递增。\n完成后报告：用例数 + 覆盖需求数 + 去重检查结果。"
+  prompt: "你是测试团队的用例设计师。\n读取 `{SKILL_DIR}/references/3-write-cases.md`，其中包含去重规则、步骤写法规范、预期结果写法规范、用例合并原则。\n工作目录：{CWD}\n需求文档：{REQ_PATH}\n评审报告：{REVIEW_PATH}\n用例数量控制：{CASE_CONTROL}\n只为以下需求生成用例（第{BATCH}/{TOTAL}批）：{REQ_IDS}\n\n质量要求（生成前逐条检查）：\n1. 用例合并：同一业务场景的不同测试点合并为1条用例（正常/异常/边界各1条）\n2. 去重：每条用例有唯一测试点，对比 title 不得雷同\n3. 步骤：每步一个操作，动词+对象+具体数据（如 `输入用户名 \\\"admin\\\"`）\n4. 预期：可验证——包含具体页面元素/文字/数值，禁用\"成功\"\"正常\"等模糊词\n5. 覆盖：每需求至少 正常+异常+边界 三类（合并为3条）\n\n用例数量控制：\n- 简单需求：3-5条用例\n- 中等需求：5-8条用例\n- 复杂需求：8-12条用例\n- 平均每需求：≤5条用例\n\nJSON 格式规则：\n1. 纯 JSON 数组 [{...}, {...}]\n2. 双引号转义为 \\\"\n3. 换行用 \\n\n用 Write 工具写入：{CWD}/test-output/.tmp/tc-batch-{BATCH}.json\n编号从 TC{BATCH_START} 开始递增。\n完成后报告：用例数 + 覆盖需求数 + 去重检查结果 + 合并率。"
 })
 ```
 

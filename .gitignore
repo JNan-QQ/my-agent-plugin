@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[oc]
+*.pyc
+.venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test artifacts
+test-output/
+.report/
+.pytest_cache/
+.coverage
+htmlcov/

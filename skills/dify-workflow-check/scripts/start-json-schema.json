@@ -1,0 +1,553 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+        "appVersion": {
+            "type": "string"
+        },
+        "authCode": {
+            "type": "string"
+        },
+        "channelId": {
+            "type": "string"
+        },
+        "chatbotSlot": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "nameId": {
+                        "type": "integer"
+                    },
+                    "nameType": {
+                        "type": "string"
+                    },
+                    "value": {
+                        "type": "string"
+                    },
+                    "valueId": {
+                        "type": "integer"
+                    },
+                    "valueNormalize": {
+                        "type": "string"
+                    },
+                    "valueType": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": false,
+                "required": [
+                    "name",
+                    "nameId",
+                    "nameType",
+                    "value",
+                    "valueId",
+                    "valueNormalize",
+                    "valueType"
+                ]
+            }
+        },
+        "cmosIntent": {
+            "type": "object",
+            "properties": {
+                "l1": {
+                    "type": "string"
+                },
+                "l1Id": {
+                    "type": "integer"
+                },
+                "l2": {
+                    "type": "string"
+                },
+                "l2Id": {
+                    "type": "integer"
+                },
+                "l3": {
+                    "type": "string"
+                },
+                "l3Id": {
+                    "type": "integer"
+                },
+                "l4": {
+                    "type": "string"
+                },
+                "l4Id": {
+                    "type": "integer"
+                },
+                "l5": {
+                    "type": "string"
+                },
+                "l5Id": {
+                    "type": "integer"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "l1",
+                "l1Id",
+                "l2",
+                "l2Id",
+                "l3",
+                "l3Id",
+                "l4",
+                "l4Id",
+                "l5",
+                "l5Id"
+            ]
+        },
+        "faqChannelId": {
+            "type": "string"
+        },
+        "functionCode": {
+            "type": "string"
+        },
+        "intentName": {
+            "type": "string"
+        },
+        "intentionName": {
+            "type": "string"
+        },
+        "location": {
+            "type": "object",
+            "properties": {
+                "city": {
+                    "type": "string"
+                },
+                "cityAdcode": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                },
+                "countryCode": {
+                    "type": "string"
+                },
+                "district": {
+                    "type": "string"
+                },
+                "districtAdcode": {
+                    "type": "string"
+                },
+                "getLocationFlag": {
+                    "type": "string"
+                },
+                "latitude": {
+                    "type": "string"
+                },
+                "longitude": {
+                    "type": "string"
+                },
+                "province": {
+                    "type": "string"
+                },
+                "street": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "city",
+                "cityAdcode",
+                "country",
+                "countryCode",
+                "district",
+                "districtAdcode",
+                "getLocationFlag",
+                "latitude",
+                "longitude",
+                "province",
+                "street"
+            ]
+        },
+        "osType": {
+            "type": "string"
+        },
+        "pageData": {
+            "type": "object",
+            "properties": {
+                "videoUrl": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "videoUrl"
+            ]
+        },
+        "pageName": {
+            "type": "string"
+        },
+        "phoneNumber": {
+            "type": "string"
+        },
+        "provinceCode": {
+            "type": "string"
+        },
+        "question": {
+            "type": "string"
+        },
+        "questionId": {
+            "type": "string"
+        },
+        "routerPayload": {
+            "type": "object",
+            "properties": {
+                "conversation": {
+                    "type": "object",
+                    "properties": {
+                        "itemList": {
+                            "type": "array"
+                        },
+                        "round": {
+                            "type": "integer"
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "itemList",
+                        "round"
+                    ]
+                },
+                "intention": {
+                    "type": "object",
+                    "properties": {
+                        "cmosIntentDetails": {
+                            "type": "object",
+                            "properties": {
+                                "emotionIntent": {
+                                    "type": "array"
+                                },
+                                "mainIntent": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "confidence": {
+                                                "type": "number"
+                                            },
+                                            "currentLevel": {
+                                                "type": "integer"
+                                            },
+                                            "id": {
+                                                "type": "string"
+                                            },
+                                            "intent": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "l1": {
+                                                        "type": "string"
+                                                    },
+                                                    "l1Id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "l2": {
+                                                        "type": "string"
+                                                    },
+                                                    "l2Id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "l3": {
+                                                        "type": "string"
+                                                    },
+                                                    "l3Id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "l4": {
+                                                        "type": "string"
+                                                    },
+                                                    "l4Id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "l5": {
+                                                        "type": "string"
+                                                    },
+                                                    "l5Id": {
+                                                        "type": "integer"
+                                                    }
+                                                },
+                                                "additionalProperties": false,
+                                                "required": [
+                                                    "l1",
+                                                    "l1Id",
+                                                    "l2",
+                                                    "l2Id",
+                                                    "l3",
+                                                    "l3Id",
+                                                    "l4",
+                                                    "l4Id",
+                                                    "l5",
+                                                    "l5Id"
+                                                ]
+                                            },
+                                            "logic": {
+                                                "type": "string"
+                                            },
+                                            "matchedModule": {
+                                                "type": "string"
+                                            },
+                                            "normalizeIntent": {
+                                                "type": "string"
+                                            },
+                                            "pattern": {
+                                                "type": "string"
+                                            },
+                                            "patternId": {
+                                                "type": "integer"
+                                            },
+                                            "queryRewrite": {
+                                                "type": "string"
+                                            },
+                                            "type": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "additionalProperties": false,
+                                        "required": [
+                                            "confidence",
+                                            "currentLevel",
+                                            "id",
+                                            "intent",
+                                            "logic",
+                                            "matchedModule",
+                                            "normalizeIntent",
+                                            "pattern",
+                                            "patternId",
+                                            "queryRewrite",
+                                            "type"
+                                        ]
+                                    }
+                                },
+                                "requestArrivedTime": {
+                                    "type": "string"
+                                },
+                                "slots": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string"
+                                            },
+                                            "nameId": {
+                                                "type": "integer"
+                                            },
+                                            "nameType": {
+                                                "type": "string"
+                                            },
+                                            "value": {
+                                                "type": "string"
+                                            },
+                                            "valueId": {
+                                                "type": "integer"
+                                            },
+                                            "valueNormalize": {
+                                                "type": "string"
+                                            },
+                                            "valueType": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "additionalProperties": false,
+                                        "required": [
+                                            "name",
+                                            "nameId",
+                                            "nameType",
+                                            "value",
+                                            "valueId",
+                                            "valueNormalize",
+                                            "valueType"
+                                        ]
+                                    }
+                                }
+                            },
+                            "additionalProperties": false,
+                            "required": [
+                                "emotionIntent",
+                                "mainIntent",
+                                "requestArrivedTime",
+                                "slots"
+                            ]
+                        },
+                        "cmosSlots": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "nameId": {
+                                        "type": "integer"
+                                    },
+                                    "nameType": {
+                                        "type": "string"
+                                    },
+                                    "value": {
+                                        "type": "string"
+                                    },
+                                    "valueId": {
+                                        "type": "integer"
+                                    },
+                                    "valueNormalize": {
+                                        "type": "string"
+                                    },
+                                    "valueType": {
+                                        "type": "string"
+                                    }
+                                },
+                                "additionalProperties": false,
+                                "required": [
+                                    "name",
+                                    "nameId",
+                                    "nameType",
+                                    "value",
+                                    "valueId",
+                                    "valueNormalize",
+                                    "valueType"
+                                ]
+                            }
+                        },
+                        "cmosToXunFei": {
+                            "type": "boolean"
+                        },
+                        "cost": {
+                            "type": "integer"
+                        },
+                        "ignore": {
+                            "type": "boolean"
+                        },
+                        "intentName": {
+                            "type": "string"
+                        },
+                        "intentTargetName": {
+                            "type": "string"
+                        },
+                        "owner": {
+                            "type": "string"
+                        },
+                        "weight": {
+                            "type": "integer"
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "cmosIntentDetails",
+                        "cmosSlots",
+                        "cmosToXunFei",
+                        "cost",
+                        "ignore",
+                        "intentName",
+                        "intentTargetName",
+                        "owner",
+                        "weight"
+                    ]
+                },
+                "question": {
+                    "type": "string"
+                },
+                "requestId": {
+                    "type": "string"
+                },
+                "routeLink": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "intent": {
+                                "type": "string"
+                            },
+                            "intentOwner": {
+                                "type": "string"
+                            },
+                            "routeCount": {
+                                "type": "integer"
+                            },
+                            "targetServer": {
+                                "type": "string"
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "intent",
+                            "intentOwner",
+                            "routeCount",
+                            "targetServer"
+                        ]
+                    }
+                },
+                "routerEnum": {
+                    "type": "string"
+                },
+                "sessionId": {
+                    "type": "string"
+                },
+                "userInfo": {
+                    "type": "object",
+                    "properties": {
+                        "areaCode": {
+                            "type": "string"
+                        },
+                        "authCode": {
+                            "type": "string"
+                        },
+                        "phone": {
+                            "type": "string"
+                        },
+                        "provinceCode": {
+                            "type": "string"
+                        },
+                        "sdkAppKey": {
+                            "type": "string"
+                        },
+                        "vip": {
+                            "type": "boolean"
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "areaCode",
+                        "authCode",
+                        "phone",
+                        "provinceCode",
+                        "sdkAppKey",
+                        "vip"
+                    ]
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "conversation",
+                "intention",
+                "question",
+                "requestId",
+                "routeLink",
+                "routerEnum",
+                "sessionId",
+                "userInfo"
+            ]
+        },
+        "sceneName": {
+            "type": "string"
+        },
+        "sdkAppKey": {
+            "type": "string"
+        },
+        "sessionId": {
+            "type": "string"
+        },
+        "slots": {
+            "type": "array"
+        },
+        "traceId": {
+            "type": "string"
+        },
+        "uiState": {
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": []
+}

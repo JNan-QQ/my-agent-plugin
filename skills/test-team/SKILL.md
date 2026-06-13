@@ -101,6 +101,7 @@ description: 测试团队6阶段工作流技能：需求分析→需求评审→
 | `{BATCH/BATCH_START/TOTAL/REQ_IDS}` | 批次控制 |
 | `{TEST_DIMENSIONS}` | 测试维度选择（如"功能+性能"） |
 | `{IMAGE_ANALYSIS}` | 是否分析需求文档图片（是/否） |
+| `{USER_CONFIRMATIONS}` | 用户对模糊风险功能点的确认标准 |
 
 ## Dispatch 模板
 
@@ -141,14 +142,29 @@ Agent({
 
 ### 阶段 2 PREPARE
 
+#### 2.1 模糊风险识别
+
+🔴 CHECKPOINT · 展示模糊风险列表，**询问用户确认**：
+
+> 以下功能点存在模糊描述，需要您确认具体标准：
+> 
+> | 需求 | 模糊描述 | 需确认 |
+> |------|---------|--------|
+> | F001 | "快速响应" | 期望响应时间是多少？ |
+> | F002 | "安全加密" | 使用什么加密算法？ |
+> 
+> 请回复您的确认，或标注"不修改"跳过。
+
+#### 2.2 五维度评审
+
 ```
 Agent({
   description: "阶段2准备：需求评审分析",
-  prompt: "你是测试团队的需求评审员。\n读取 `{SKILL_DIR}/references/2-review-req.md` 获取完整评审指令。\n工作目录：{CWD}\n需求文档路径：{REQ_PATH}\n任务：执行5维度评审+封驳判定，不写最终报告。草稿写入 {CWD}/test-output/.tmp/req-review-draft.json。\n输出严格 JSON：{\"stage\":2,\"summary\":\"...\",\"scores\":{},\"verdict\":\"通过|有条件通过|封驳\",\"issues\":[],\"questions\":[{\"id\":\"q1\",\"type\":\"confirm\",\"text\":\"...\"}],\"artifacts\":{\"review_draft_path\":\"{CWD}/test-output/.tmp/req-review-draft.json\"}}"
+  prompt: "你是测试团队的需求评审员。\n读取 `{SKILL_DIR}/references/2-review-req.md` 获取完整评审指令。\n工作目录：{CWD}\n需求文档路径：{REQ_PATH}\n用户确认的标准：{USER_CONFIRMATIONS}\n任务：执行5维度评审+封驳判定，不写最终报告。草稿写入 {CWD}/test-output/.tmp/req-review-draft.json。\n输出严格 JSON：{\"stage\":2,\"summary\":\"...\",\"scores\":{},\"verdict\":\"通过|有条件通过|封驳\",\"issues\":[],\"questions\":[{\"id\":\"q1\",\"type\":\"confirm\",\"text\":\"...\"}],\"pending_confirmations\":[{\"requirement\":\"F001\",\"fuzzy\":\"快速响应\",\"confirmed\":\"响应时间<2s\"}],\"artifacts\":{\"review_draft_path\":\"{CWD}/test-output/.tmp/req-review-draft.json\"}}"
 })
 ```
 
-🔴 CHECKPOINT · 解析JSON → 展示summary+scores+verdict+questions → **等用户回答** → 派COMPLETE
+🔴 CHECKPOINT · 解析JSON → 展示summary+scores+verdict+pending_confirmations → **等用户回答** → 派COMPLETE
 
 ### 阶段 2 COMPLETE
 

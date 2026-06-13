@@ -99,15 +99,41 @@ description: 测试团队6阶段工作流技能：需求分析→需求评审→
 | `{OUTPUT_PATH}` | 阶段3 PREPARE 的 `output_path` |
 | `{USER_INPUT/DECISION/COMMENTS/RESULTS_TEXT}` | 用户输入 |
 | `{BATCH/BATCH_START/TOTAL/REQ_IDS}` | 批次控制 |
+| `{TEST_DIMENSIONS}` | 测试维度选择（如"功能+性能"） |
+| `{IMAGE_ANALYSIS}` | 是否分析需求文档图片（是/否） |
 
 ## Dispatch 模板
 
 ### 阶段 1：需求分析（ONE-SHOT）
 
+#### 1.1 测试维度选择
+
+🔴 CHECKPOINT · 展示测试维度选项，**等用户确认**：
+
+| 维度 | 说明 | 默认 |
+|------|------|------|
+| 功能测试 | 验证业务逻辑、交互流程、数据处理 | ✓ 必选 |
+| 性能测试 | 响应时间、并发、吞吐量 | 可选 |
+| 安全测试 | 认证、授权、数据加密、防攻击 | 可选 |
+| 兼容性测试 | 浏览器、OS、设备适配 | 可选 |
+| 可用性测试 | 用户体验、操作便捷性 | 可选 |
+
+用户回复示例："功能+性能" 或 "只测功能"
+
+#### 1.2 需求文档图片分析
+
+若用户提供文档路径，提醒用户：
+
+> 该需求文档包含图片内容，是否需要分析图片中的流程图/原型图/架构图？
+> - 分析图片：提取图片中的业务规则、交互流程、数据流转
+> - 不分析：仅分析文字内容
+
+#### 1.3 执行需求分析
+
 ```
 Agent({
   description: "执行阶段1：需求分析",
-  prompt: "你是测试团队的需求分析师。\n读取 `{SKILL_DIR}/references/1-analyze-req.md` 获取完整执行指令。\n工作目录：{CWD}\n用户输入：\n{USER_INPUT}\n严格按照指令执行，产出 REQ-*.md 到 test-output/requirements/。\n完成后报告：产出文件路径 + 需求条数 + 风险条数。"
+  prompt: "你是测试团队的需求分析师。\n读取 `{SKILL_DIR}/references/1-analyze-req.md` 获取完整执行指令。\n工作目录：{CWD}\n用户输入：\n{USER_INPUT}\n测试维度：{TEST_DIMENSIONS}\n图片分析：{IMAGE_ANALYSIS}\n严格按照指令执行，产出 REQ-*.md 到 test-output/requirements/。\n完成后报告：产出文件路径 + 需求条数 + 风险条数。"
 })
 ```
 

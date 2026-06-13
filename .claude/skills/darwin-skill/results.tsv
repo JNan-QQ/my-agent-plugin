@@ -31,3 +31,6 @@ timestamp	commit	skill	old_score	new_score	status	dimension	note	eval_mode
 2026-06-02T14:55	5db4e08	dify-workflow-check	74.4	75.6	keep	dim2	Phase 2b prompt 精简为模块化结构	dry_run
 2026-06-02T15:00	-	dify-workflow-check	75.6	79.8	keep	dim8	实测 Prompt 1：完整流程执行成功，23节点/4分支/1info，报告结构化	full_test
 2026-06-02T15:05	0041c31	dify-workflow-check	80.2	80.8	keep	dim4	补充 Phase 2b 后检查点	dry_run
+2026-06-13T23:30	baseline	test-team	82.8	86.0	baseline	dim8	独立子agent实测：Prompt1=8, Prompt2=8, Prompt3=7, avg=7.67	full_test
+2026-06-13T23:45	d67d8b2	test-team	86.0	87.2	keep	dim8	增强风险分类+验收标准检查：Prompt1=8.5(+0.5), 风险7条(分级), 非功能10项	full_test
+2026-06-13T23:55	bb438e9	test-team	87.2	88.9	keep	dim8	增强可行性评分细则：Prompt2=8.5(+0.5), 可行性30→75分, 封驳原因明确	full_test

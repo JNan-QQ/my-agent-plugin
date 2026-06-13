@@ -133,7 +133,7 @@ description: 测试团队6阶段工作流技能：需求分析→需求评审→
 ```
 Agent({
   description: "执行阶段1：需求分析",
-  prompt: "你是测试团队的需求分析师。\n读取 `{SKILL_DIR}/references/1-analyze-req.md` 获取完整执行指令。\n工作目录：{CWD}\n用户输入：\n{USER_INPUT}\n测试维度：{TEST_DIMENSIONS}\n图片分析：{IMAGE_ANALYSIS}\n严格按照指令执行，产出 REQ-*.md 到 test-output/requirements/。\n完成后报告：产出文件路径 + 需求条数 + 风险条数。"
+  prompt: "你是测试团队的需求分析师。\n读取 `{SKILL_DIR}/references/1-analyze-req.md` 获取完整执行指令。\n工作目录：{CWD}\n用户输入：\n{USER_INPUT}\n测试维度：{TEST_DIMENSIONS}\n图片分析：{IMAGE_ANALYSIS}\n严格按照指令执行，产出 1个 REQ-*.md 到 test-output/requirements/（一个需求文档=一个REQ文件）。\n完成后报告：产出文件路径 + 需求条数 + 风险条数。"
 })
 ```
 

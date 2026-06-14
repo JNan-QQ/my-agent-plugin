@@ -7,10 +7,37 @@ description: 在当前项目中初始化 Playwright Python + pytest 自动化测
 
 在当前项目中搭建完整的 Playwright Python + pytest 自动化测试框架。框架包含三个专用 AI agent（Planner 规划测试、Generator 生成代码、Healer 修复失败），以及配套的辅助脚本和配置文件。
 
+## 使用场景
+
+| 场景 | 触发词 | 说明 |
+|------|--------|------|
+| 新项目搭建 | `/init-playwright-test` | 从零开始搭建测试框架 |
+| 已有项目补充 | `初始化 Playwright` | 在已有项目中添加测试能力 |
+| 重新初始化 | `重新初始化 Playwright` | 覆盖现有配置（需确认） |
+
 ## 前置条件
 
 - Python 3.11+
 - Playwright MCP 服务器已配置（`mcp__playwright__browser_*` 工具可用）
+
+## 输入/输出规格
+
+### 输入
+- 无强制输入，可选环境变量：`BASE_URL`、`TEST_USER`、`TEST_PASSWORD`
+- 已有 `requirements.txt` 时自动合并依赖
+
+### 输出
+| 文件/目录 | 说明 |
+|-----------|------|
+| `.claude/agents/playwright-test-*.md` | 3个AI agent定义 |
+| `tools/test_runner.py` | 测试执行工具 |
+| `tools/plan_renderer.py` | 计划渲染工具 |
+| `tests/conftest.py` | pytest配置 |
+| `tests/__init__.py` | 包标识文件 |
+| `pytest.ini` | pytest全局配置 |
+| `.claude/settings.local.json` | MCP权限配置 |
+| `.env.example` | 环境变量模板 |
+| `requirements.txt` | 依赖列表 |
 
 ## 初始化流程
 
@@ -22,6 +49,9 @@ SKILL_DIR="<本技能的 base directory>"
 ```
 
 ### Step 1: 环境检查
+
+**输入**：当前工作目录
+**输出**：`CLEAN`（可继续）或 `ALREADY_INIT`（需确认覆盖）
 
 ```bash
 pwd
@@ -35,6 +65,9 @@ ls .claude/agents/playwright-test-planner.md 2>/dev/null && echo "ALREADY_INIT" 
 | `pwd` 报错 | 检查是否在有效目录 | 提示用户 `cd` 到目标项目目录 |
 
 ### Step 2: 创建目录并批量复制固定文件
+
+**输入**：`SKILL_DIR`（技能目录路径）
+**输出**：创建的目录和文件列表
 
 以下文件内容固定不变，全部用 `cp` 一次性完成，不要用 Read/Write 工具：
 
@@ -73,6 +106,9 @@ cp "$SKILL_DIR/references/.env.example"        .env.example
 | `cp` 目标目录不存在 | 确保 `mkdir -p` 先执行 | 手动创建目标目录 |
 
 ### Step 3: 处理 requirements.txt
+
+**输入**：项目现有 `requirements.txt`（可选）
+**输出**：合并后的 `requirements.txt`
 
 根据项目是否已有 `requirements.txt` 执行不同操作：
 
@@ -117,6 +153,9 @@ cp "$SKILL_DIR/references/requirements.txt" requirements.txt
 
 ### Step 4: 复制或合并配置和文档
 
+**输入**：项目现有配置文件（可选）
+**输出**：合并后的配置文件
+
 ```bash
 SKILL_DIR="<本技能的 base directory>"
 ```
@@ -137,6 +176,9 @@ SKILL_DIR="<本技能的 base directory>"
 ```
 
 ### Step 5: 创建或追加 .gitignore
+
+**输入**：项目现有 `.gitignore`（可选）
+**输出**：更新后的 `.gitignore`
 
 如果 `.gitignore` 不存在，用 Write 工具创建。如果已存在，检查是否已包含 `report/`，没有则用 Edit 工具追加以下内容：
 
@@ -169,6 +211,9 @@ specs/*/*.md
 如果已包含 `report/`，则跳过追加。如果不存在，在文件末尾追加上述内容（保留用户原有内容）。
 
 ### Step 6: 创建虚拟环境并安装依赖
+
+**输入**：`requirements.txt`
+**输出**：`.venv` 目录，已安装的依赖
 
 ```bash
 python -m venv .venv
@@ -205,6 +250,9 @@ python -m playwright install chromium
 | 验证 import 失败 | 检查 `.venv` 是否激活 | 重新执行 `pip install` |
 
 ### Step 7: 验证并提示
+
+**输入**：所有已创建的文件
+**输出**：验证结果和完成信息
 
 验证所有文件已创建：
 ```bash
@@ -264,6 +312,23 @@ Playwright Python + pytest 测试框架初始化完成！
 | **模块识别** | Step 2 自动创建 `tests/__init__.py` | 避免 pytest 同名文件冲突 |
 | **API 风格** | 只用 `playwright.sync_api`，不用异步 | 与 pytest-playwright 兼容 |
 | **版本控制** | 所有依赖 `<X.0.0` 上界 | 防止破坏性变更 |
+
+## 与其他技能的配合
+
+| 技能 | 配合方式 |
+|------|----------|
+| **test-team** | 使用本技能初始化框架后，用 test-team 的阶段3生成测试用例，阶段5执行测试 |
+| **init-playwright-test** | 本技能是起点，初始化后可使用 Planner/Generator/Healer 三个agent |
+
+## 工作流示例
+
+```
+1. 初始化框架: /init-playwright-test
+2. 生成测试计划: @playwright-test-planner <URL>
+3. 生成测试代码: @playwright-test-generator
+4. 运行测试: python tools/test_runner.py run --output json
+5. 修复失败测试: @playwright-test-healer
+```
 
 ## 反例与黑名单
 

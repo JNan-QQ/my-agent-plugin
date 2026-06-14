@@ -78,6 +78,8 @@ SKILL_DIR="<本技能的 base directory>"
 mkdir -p .claude/agents tests tools specs
 
 # 创建 tests/__init__.py（避免 pytest 同名文件冲突）
+# Bash/Git Bash: touch tests/__init__.py
+# PowerShell: New-Item -ItemType File -Path tests/__init__.py -Force
 touch tests/__init__.py
 
 # 复制 3 个 agent 定义

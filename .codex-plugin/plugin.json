@@ -7,6 +7,7 @@
   },
   "keywords": ["test", "testing", "playwright", "dify", "workflow", "automation"],
   "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Test Automation Skills",
     "shortDescription": "AI测试工作流：需求分析→用例编写→自动化测试→工作流校验",

@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "doc2md": {
+      "cwd": ".",
+      "command": "./mcp/doc2md-mcp.exe",
+      "args": [],
+      "env": {
+        "DOC2MD_MCP": 1
+      }
+    }
+  }
+}

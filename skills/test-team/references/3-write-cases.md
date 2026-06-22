@@ -142,6 +142,14 @@ python {SKILL_DIR}/scripts/case_json_manager.py delete --file {TC_PATH} --indice
 
 **JSON 字段**：id(TC001) / title / precondition / steps(\n分隔) / expected / priority(高/中/低) / type / req(F001) / note
 
+**type 字段允许值**（必须使用以下标准值）：
+
+| type值 | 说明 | 示例 |
+|--------|------|------|
+| 正常流程 | 正常业务场景的测试用例 | 正常登录、正常创建流程 |
+| 异常流程 | 异常情况的测试用例 | 错误密码、空输入、网络中断 |
+| 边界条件 | 边界值测试用例 | 密码6位/20位、并发100 |
+
 **JSON 格式规则（必须遵守）**：
 1. 字符串中的双引号必须转义为 `\"`（如：`输入 \"test\" 密码`）
 2. 字符串中的换行用 `\n`，不要用真实换行符

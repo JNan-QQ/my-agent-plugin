@@ -43,13 +43,13 @@ description: 测试团队6阶段工作流技能：需求分析→需求评审→
 
 | 条件 | → 阶段 |
 |------|--------|
-| 无 `**/REQ-*.md` | 询问用户提供需求 |
-| 无 `**/req-review-*.md` | 2 需求评审 |
+| 无 `test-output/*/requirements/REQ-*.md` | 询问用户提供需求 |
+| 无 `test-output/*/reviews/req-review-*.md` | 2 需求评审 |
 | 最新 req-review 为封驳 | 1 修订需求 |
-| 无 `**/TC-*.json` | 3 用例编写 |
-| 无 `**/case-review-*.md` | 4 用例评审 |
+| 无 `test-output/*/test-cases/TC-*.json` | 3 用例编写 |
+| 无 `test-output/*/reviews/case-review-*.md` | 4 用例评审 |
 | 最新 case-review 为封驳 | 3 修订用例 |
-| 无 `**/EXEC-*.json` | 5 执行记录 |
+| 无 `test-output/*/execution/EXEC-*.json` | 5 执行记录 |
 | 有 EXEC | 6 测试报告 |
 
 ## 失败模式（三段式：触发 → 一线修复 → 兜底）
@@ -90,9 +90,11 @@ description: 测试团队6阶段工作流技能：需求分析→需求评审→
 |------|------|
 | `{SKILL_DIR}` | SKILL.md 所在目录绝对路径 |
 | `{CWD}` | 当前工作目录 |
-| `{REQ_PATH}` | Glob `**/REQ-*.md` 取最新 |
-| `{TC_PATH}` | Glob `**/TC-*.json` 取最新 |
-| `{REVIEW_PATH}` | Glob `**/*-review-*.md` 取最新 |
+| `{PROJECT_CODE}` | 项目英文缩写（如 voice-pkg、user-login），阶段1开始时生成 |
+| `{PROJECT_DIR}` | `{CWD}/test-output/{PROJECT_CODE}/`，项目专属目录 |
+| `{REQ_PATH}` | `{PROJECT_DIR}/requirements/REQ-*.md` 取最新 |
+| `{TC_PATH}` | `{PROJECT_DIR}/test-cases/TC-*.json` 取最新 |
+| `{REVIEW_PATH}` | `{PROJECT_DIR}/reviews/*-review-*.md` 取最新 |
 | `{DRAFT_PATH}` | PREPARE 返回的 `artifacts.*_draft_path` |
 | `{ANALYSIS_PATH}` | PREPARE 返回的 `artifacts.analysis_path` |
 | `{STATS_PATH}` | 阶段6 PREPARE 的 `artifacts.stats_path` |
@@ -104,11 +106,34 @@ description: 测试团队6阶段工作流技能：需求分析→需求评审→
 | `{USER_CONFIRMATIONS}` | 用户对模糊风险功能点的确认标准 |
 | `{CASE_CONTROL}` | 用例数量控制（精简/保留） |
 
+**项目目录结构**：
+```
+test-output/{PROJECT_CODE}/
+├── requirements/    # 需求文档
+├── test-cases/      # 测试用例
+├── reviews/         # 评审报告
+├── execution/       # 执行记录
+└── reports/         # 测试报告
+```
+
 ## Dispatch 模板
 
 ### 阶段 1：需求分析（ONE-SHOT）
 
-#### 1.1 测试维度选择
+#### 1.1 项目初始化
+
+🔴 CHECKPOINT · 展示项目代号，**等用户确认**：
+
+> 请输入项目英文缩写（用于目录命名，如：voice-pkg、user-login、payment）
+> 
+> 建议：根据需求文档名称生成缩写
+> - 推荐语音包 → `voice-pkg`
+> - 用户登录优化 → `user-login`
+> - 支付流程改造 → `payment`
+
+用户回复后，创建项目目录：`test-output/{PROJECT_CODE}/`
+
+#### 1.2 测试维度选择
 
 🔴 CHECKPOINT · 展示测试维度选项，**等用户确认**：
 
@@ -122,7 +147,7 @@ description: 测试团队6阶段工作流技能：需求分析→需求评审→
 
 用户回复示例："功能+性能" 或 "只测功能"
 
-#### 1.2 文档格式处理
+#### 1.3 文档格式处理
 
 若用户提供文件路径，检测文件格式：
 
@@ -144,7 +169,7 @@ MCP_TOOL: convert_file
 
 转换完成后，读取生成的 `.md` 文件继续分析。
 
-#### 1.3 需求文档图片分析
+#### 1.4 需求文档图片分析
 
 若用户提供的是文档路径（.docx/.pdf/.md），提醒用户：
 
@@ -152,12 +177,12 @@ MCP_TOOL: convert_file
 > - 分析图片：提取图片中的业务规则、交互流程、数据流转
 > - 不分析：仅分析文字内容
 
-#### 1.4 执行需求分析
+#### 1.5 执行需求分析
 
 ```
 Agent({
   description: "执行阶段1：需求分析",
-  prompt: "你是测试团队的需求分析师。\n读取 `{SKILL_DIR}/references/1-analyze-req.md` 获取完整执行指令。\n工作目录：{CWD}\n用户输入：\n{USER_INPUT}\n测试维度：{TEST_DIMENSIONS}\n图片分析：{IMAGE_ANALYSIS}\n严格按照指令执行，产出 1个 REQ-*.md 到 test-output/requirements/（一个需求文档=一个REQ文件）。\n完成后报告：产出文件路径 + 需求条数 + 风险条数。"
+  prompt: "你是测试团队的需求分析师。\n读取 `{SKILL_DIR}/references/1-analyze-req.md` 获取完整执行指令。\n工作目录：{CWD}\n项目目录：{PROJECT_DIR}\n用户输入：\n{USER_INPUT}\n测试维度：{TEST_DIMENSIONS}\n图片分析：{IMAGE_ANALYSIS}\n严格按照指令执行，产出 1个 REQ-*.md 到 {PROJECT_DIR}/requirements/（一个需求文档=一个REQ文件）。\n完成后报告：产出文件路径 + 需求条数 + 风险条数。"
 })
 ```
 
@@ -183,7 +208,7 @@ Agent({
 ```
 Agent({
   description: "阶段2准备：需求评审分析",
-  prompt: "你是测试团队的需求评审员。\n读取 `{SKILL_DIR}/references/2-review-req.md` 获取完整评审指令。\n工作目录：{CWD}\n需求文档路径：{REQ_PATH}\n用户确认的标准：{USER_CONFIRMATIONS}\n任务：执行5维度评审+封驳判定，不写最终报告。草稿写入 {CWD}/test-output/.tmp/req-review-draft.json。\n输出严格 JSON：{\"stage\":2,\"summary\":\"...\",\"scores\":{},\"verdict\":\"通过|有条件通过|封驳\",\"issues\":[],\"questions\":[{\"id\":\"q1\",\"type\":\"confirm\",\"text\":\"...\"}],\"pending_confirmations\":[{\"requirement\":\"F001\",\"fuzzy\":\"快速响应\",\"confirmed\":\"响应时间<2s\"}],\"artifacts\":{\"review_draft_path\":\"{CWD}/test-output/.tmp/req-review-draft.json\"}}"
+  prompt: "你是测试团队的需求评审员。\n读取 `{SKILL_DIR}/references/2-review-req.md` 获取完整评审指令。\n工作目录：{CWD}\n项目目录：{PROJECT_DIR}\n需求文档路径：{REQ_PATH}\n用户确认的标准：{USER_CONFIRMATIONS}\n任务：执行5维度评审+封驳判定，不写最终报告。草稿写入 {PROJECT_DIR}/.tmp/req-review-draft.json。\n输出严格 JSON：{\"stage\":2,\"summary\":\"...\",\"scores\":{},\"verdict\":\"通过|有条件通过|封驳\",\"issues\":[],\"questions\":[{\"id\":\"q1\",\"type\":\"confirm\",\"text\":\"...\"}],\"pending_confirmations\":[{\"requirement\":\"F001\",\"fuzzy\":\"快速响应\",\"confirmed\":\"响应时间<2s\"}],\"artifacts\":{\"review_draft_path\":\"{PROJECT_DIR}/.tmp/req-review-draft.json\"}}"
 })
 ```
 
@@ -194,7 +219,7 @@ Agent({
 ```
 Agent({
   description: "阶段2完成：写入需求评审报告",
-  prompt: "你是测试团队的需求评审员。\n读取 `{SKILL_DIR}/references/2-review-req.md` 获取报告格式。\n工作目录：{CWD}\n评审草稿：{DRAFT_PATH}\n用户决定：{USER_DECISION}\n用户意见：{USER_COMMENTS}\n生成评审报告 req-review-*.md 到 test-output/reviews/。\n完成后报告：文件路径 + 最终结论。"
+  prompt: "你是测试团队的需求评审员。\n读取 `{SKILL_DIR}/references/2-review-req.md` 获取报告格式。\n工作目录：{CWD}\n项目目录：{PROJECT_DIR}\n评审草稿：{DRAFT_PATH}\n用户决定：{USER_DECISION}\n用户意见：{USER_COMMENTS}\n生成评审报告 req-review-*.md 到 {PROJECT_DIR}/reviews/。\n完成后报告：文件路径 + 最终结论。"
 })
 ```
 
@@ -217,7 +242,7 @@ Agent({
 ```
 Agent({
   description: "阶段3准备：需求分组",
-  prompt: "你是测试团队的用例设计师。\n读取 `{SKILL_DIR}/references/3-write-cases.md`。\n工作目录：{CWD}\n需求文档：{REQ_PATH}\n评审报告（封驳后必填，否则空）：{REVIEW_PATH}\n用例数量控制：{CASE_CONTROL}\n任务：按功能模块分组（每组10-15条需求），不生成用例。\n输出JSON：{\"stage\":3,\"summary\":\"N条需求分M组\",\"groups\":[{\"group\":1,\"reqs\":[\"F001\"],\"summary\":\"模块名\",\"estimated_cases\":5}],\"total_reqs\":N,\"total_estimated_cases\":M,\"output_path\":\"test-output/test-cases/TC-YYYYMMDD-HHMM.json\"}"
+  prompt: "你是测试团队的用例设计师。\n读取 `{SKILL_DIR}/references/3-write-cases.md`。\n工作目录：{CWD}\n项目目录：{PROJECT_DIR}\n需求文档：{REQ_PATH}\n评审报告（封驳后必填，否则空）：{REVIEW_PATH}\n用例数量控制：{CASE_CONTROL}\n任务：按功能模块分组（每组10-15条需求），不生成用例。\n输出JSON：{\"stage\":3,\"summary\":\"N条需求分M组\",\"groups\":[{\"group\":1,\"reqs\":[\"F001\"],\"summary\":\"模块名\",\"estimated_cases\":5}],\"total_reqs\":N,\"total_estimated_cases\":M,\"output_path\":\"{PROJECT_DIR}/test-cases/TC-YYYYMMDD-HHMM.json\"}"
 })
 ```
 
@@ -228,13 +253,13 @@ Agent({
 ```
 Agent({
   description: "阶段3完成：生成第{BATCH}/{TOTAL}批用例",
-  prompt: "你是测试团队的用例设计师。\n读取 `{SKILL_DIR}/references/3-write-cases.md`，其中包含去重规则、步骤写法规范、预期结果写法规范、用例合并原则。\n工作目录：{CWD}\n需求文档：{REQ_PATH}\n评审报告：{REVIEW_PATH}\n用例数量控制：{CASE_CONTROL}\n只为以下需求生成用例（第{BATCH}/{TOTAL}批）：{REQ_IDS}\n\n质量要求（生成前逐条检查）：\n1. 场景覆盖优先：每需求必须覆盖 正常+异常+边界 三类场景（各1条）\n2. 去重：每条用例有唯一测试点，对比 title 不得雷同\n3. 步骤：每步一个操作，动词+对象+具体数据（如 `输入用户名 \\\"admin\\\"`）\n4. 预期：可验证——包含具体页面元素/文字/数值，禁用\"成功\"\"正常\"等模糊词\n5. 合并建议：同一场景的不同测试点可合并，但不强制（优先保证覆盖）\n\n用例数量控制：\n- 简单需求：3-5条用例\n- 中等需求：5-8条用例\n- 复杂需求：8-12条用例\n- 平均每需求：≤5条用例\n\nJSON 格式规则：\n1. 纯 JSON 数组 [{...}, {...}]\n2. 双引号转义为 \\\"\n3. 换行用 \\n\n用 Write 工具写入：{CWD}/test-output/.tmp/tc-batch-{BATCH}.json\n编号从 TC{BATCH_START} 开始递增。\n完成后报告：用例数 + 覆盖需求数 + 去重检查结果 + 场景覆盖情况（正常/异常/边界各几条）。"
+  prompt: "你是测试团队的用例设计师。\n读取 `{SKILL_DIR}/references/3-write-cases.md`，其中包含去重规则、步骤写法规范、预期结果写法规范、用例合并原则。\n工作目录：{CWD}\n项目目录：{PROJECT_DIR}\n需求文档：{REQ_PATH}\n评审报告：{REVIEW_PATH}\n用例数量控制：{CASE_CONTROL}\n只为以下需求生成用例（第{BATCH}/{TOTAL}批）：{REQ_IDS}\n\n质量要求（生成前逐条检查）：\n1. 场景覆盖优先：每需求必须覆盖 正常+异常+边界 三类场景（各1条）\n2. 去重：每条用例有唯一测试点，对比 title 不得雷同\n3. 步骤：每步一个操作，动词+对象+具体数据（如 `输入用户名 \\\"admin\\\"`）\n4. 预期：可验证——包含具体页面元素/文字/数值，禁用\"成功\"\"正常\"等模糊词\n5. 合并建议：同一场景的不同测试点可合并，但不强制（优先保证覆盖）\n\n用例数量控制：\n- 简单需求：3-5条用例\n- 中等需求：5-8条用例\n- 复杂需求：8-12条用例\n- 平均每需求：≤5条用例\n\nJSON 格式规则：\n1. 纯 JSON 数组 [{...}, {...}]\n2. 双引号转义为 \\\"\n3. 换行用 \\n\n用 Write 工具写入：{PROJECT_DIR}/.tmp/tc-batch-{BATCH}.json\n编号从 TC{BATCH_START} 开始递增。\n完成后报告：用例数 + 覆盖需求数 + 去重检查结果 + 场景覆盖情况（正常/异常/边界各几条）。"
 })
 ```
 
 主 agent 每批后执行：
-1. 首批：`python scripts/case_json_manager.py create --output {OUTPUT_PATH} --data test-output/.tmp/tc-batch-1.json`
-2. 后续：`python scripts/case_json_manager.py append --file {OUTPUT_PATH} --data test-output/.tmp/tc-batch-{BATCH}.json`
+1. 首批：`python scripts/case_json_manager.py create --output {OUTPUT_PATH} --data {PROJECT_DIR}/.tmp/tc-batch-1.json`
+2. 后续：`python scripts/case_json_manager.py append --file {OUTPUT_PATH} --data {PROJECT_DIR}/.tmp/tc-batch-{BATCH}.json`
 3. 失败重试1次，仍失败跳过并标注
 
 ### 阶段 4 PREPARE
@@ -242,7 +267,7 @@ Agent({
 ```
 Agent({
   description: "阶段4准备：用例覆盖度分析",
-  prompt: "你是测试团队的用例评审员。\n工作目录：{CWD}\n用例文件：{TC_PATH}\n需求文档：{REQ_PATH}\n调用 analyze 获取数据：python scripts/case_json_manager.py analyze --file {TC_PATH} --reqs <需求范围> --output {CWD}/test-output/.tmp/analysis.json\n基于分析结果判断封驳（需求覆盖率<90%或场景覆盖率<70%→封驳）。\n输出JSON：{\"stage\":4,\"summary\":\"...\",\"coverage\":{\"requirement_rate\":X,\"scene_rate\":Y},\"verdict\":\"通过|有条件通过|封驳\",\"issues\":[],\"questions\":[{\"id\":\"q1\",\"type\":\"confirm\",\"text\":\"...\"}],\"artifacts\":{\"analysis_path\":\"{CWD}/test-output/.tmp/analysis.json\",\"review_draft_path\":\"{CWD}/test-output/.tmp/case-review-draft.json\"}}"
+  prompt: "你是测试团队的用例评审员。\n工作目录：{CWD}\n项目目录：{PROJECT_DIR}\n用例文件：{TC_PATH}\n需求文档：{REQ_PATH}\n调用 analyze 获取数据：python scripts/case_json_manager.py analyze --file {TC_PATH} --reqs <需求范围> --output {PROJECT_DIR}/.tmp/analysis.json\n基于分析结果判断封驳（需求覆盖率<90%或场景覆盖率<70%→封驳）。\n输出JSON：{\"stage\":4,\"summary\":\"...\",\"coverage\":{\"requirement_rate\":X,\"scene_rate\":Y},\"verdict\":\"通过|有条件通过|封驳\",\"issues\":[],\"questions\":[{\"id\":\"q1\",\"type\":\"confirm\",\"text\":\"...\"}],\"artifacts\":{\"analysis_path\":\"{PROJECT_DIR}/.tmp/analysis.json\",\"review_draft_path\":\"{PROJECT_DIR}/.tmp/case-review-draft.json\"}}"
 })
 ```
 
@@ -253,7 +278,7 @@ Agent({
 ```
 Agent({
   description: "阶段4完成：写入用例评审报告",
-  prompt: "你是测试团队的用例评审员。\n读取 `{SKILL_DIR}/references/4-review-cases.md`。\n工作目录：{CWD}\n评审草稿：{DRAFT_PATH}\n分析数据：{ANALYSIS_PATH}\n用户决定：{USER_DECISION}\n用户意见：{USER_COMMENTS}\n生成 case-review-*.md 到 test-output/reviews/，末尾写最终结论。\n完成后报告：文件路径 + 最终结论。"
+  prompt: "你是测试团队的用例评审员。\n读取 `{SKILL_DIR}/references/4-review-cases.md`。\n工作目录：{CWD}\n项目目录：{PROJECT_DIR}\n评审草稿：{DRAFT_PATH}\n分析数据：{ANALYSIS_PATH}\n用户决定：{USER_DECISION}\n用户意见：{USER_COMMENTS}\n生成 case-review-*.md 到 {PROJECT_DIR}/reviews/，末尾写最终结论。\n完成后报告：文件路径 + 最终结论。"
 })
 ```
 
@@ -264,7 +289,7 @@ Agent({
 ```
 Agent({
   description: "阶段5准备：生成待执行用例清单",
-  prompt: "你是测试团队的执行协调员。\n读取 `{SKILL_DIR}/references/5-exec-cases.md`。\n工作目录：{CWD}\n读取最新 TC-*.json，生成待执行清单（每批15-20条）。\n输出JSON：{\"stage\":5,\"summary\":\"待执行N条分M批\",\"batches\":[{\"batch\":1,\"cases\":[{\"id\":\"TC001\",\"title\":\"...\",\"steps_summary\":\"...\"}]}],\"prompt_template\":\"TC编号 | 通过/失败/阻塞/跳过 | 实际结果\"}"
+  prompt: "你是测试团队的执行协调员。\n读取 `{SKILL_DIR}/references/5-exec-cases.md`。\n工作目录：{CWD}\n项目目录：{PROJECT_DIR}\n读取最新 TC-*.json，生成待执行清单（每批15-20条）。\n输出JSON：{\"stage\":5,\"summary\":\"待执行N条分M批\",\"batches\":[{\"batch\":1,\"cases\":[{\"id\":\"TC001\",\"title\":\"...\",\"steps_summary\":\"...\"}]}],\"prompt_template\":\"TC编号 | 通过/失败/阻塞/跳过 | 实际结果\"}"
 })
 ```
 
@@ -275,7 +300,7 @@ Agent({
 ```
 Agent({
   description: "阶段5完成：写入执行记录和缺陷",
-  prompt: "你是测试团队的执行记录员。\n读取 `{SKILL_DIR}/references/5-exec-cases.md`。\n工作目录：{CWD}\n用例文件：{TC_PATH}\n用户执行结果：\n{RESULTS_TEXT}\n生成 EXEC-*.json + BUGS-*.json（如有失败）到 test-output/execution/。\n完成后报告：EXEC路径 + BUGS路径（如有）+ 通过率 + 缺陷数。"
+  prompt: "你是测试团队的执行记录员。\n读取 `{SKILL_DIR}/references/5-exec-cases.md`。\n工作目录：{CWD}\n项目目录：{PROJECT_DIR}\n用例文件：{TC_PATH}\n用户执行结果：\n{RESULTS_TEXT}\n生成 EXEC-*.json + BUGS-*.json（如有失败）到 {PROJECT_DIR}/execution/。\n完成后报告：EXEC路径 + BUGS路径（如有）+ 通过率 + 缺陷数。"
 })
 ```
 
@@ -286,7 +311,7 @@ Agent({
 ```
 Agent({
   description: "阶段6准备：测试数据统计",
-  prompt: "你是测试团队的数据分析员。\n工作目录：{CWD}\n调用：python scripts/report_stats_generator.py --req test-output/requirements/REQ-*.md --tc test-output/test-cases/TC-*.json --exec test-output/execution/EXEC-*.json --bugs test-output/execution/BUGS-*.json --output {CWD}/test-output/.tmp/report-stats.json\n读取 {CWD}/test-output/.tmp/report-stats.json 获取统计摘要。\n输出JSON：{\"stage\":6,\"summary\":\"...\",\"stats\":{\"pass_rate\":X,\"total_cases\":N,\"defect_count\":M,\"coverage_rate\":Y},\"artifacts\":{\"stats_path\":\"{CWD}/test-output/.tmp/report-stats.json\"}}"
+  prompt: "你是测试团队的数据分析员。\n工作目录：{CWD}\n项目目录：{PROJECT_DIR}\n调用：python scripts/report_stats_generator.py --req {PROJECT_DIR}/requirements/REQ-*.md --tc {PROJECT_DIR}/test-cases/TC-*.json --exec {PROJECT_DIR}/execution/EXEC-*.json --bugs {PROJECT_DIR}/execution/BUGS-*.json --output {PROJECT_DIR}/.tmp/report-stats.json\n读取 {PROJECT_DIR}/.tmp/report-stats.json 获取统计摘要。\n输出JSON：{\"stage\":6,\"summary\":\"...\",\"stats\":{\"pass_rate\":X,\"total_cases\":N,\"defect_count\":M,\"coverage_rate\":Y},\"artifacts\":{\"stats_path\":\"{PROJECT_DIR}/.tmp/report-stats.json\"}}"
 })
 ```
 
@@ -297,7 +322,7 @@ Agent({
 ```
 Agent({
   description: "阶段6完成：生成测试报告",
-  prompt: "你是测试团队的报告撰写员。\n读取 `{SKILL_DIR}/references/6-test-report.md`。\n工作目录：{CWD}\n统计数据：{STATS_PATH}\n基于统计数据生成 REPORT-*.md 到 test-output/reports/，不读原始JSON。\n完成后报告：文件路径 + 通过率 + 缺陷数 + 质量评估结论。"
+  prompt: "你是测试团队的报告撰写员。\n读取 `{SKILL_DIR}/references/6-test-report.md`。\n工作目录：{CWD}\n项目目录：{PROJECT_DIR}\n统计数据：{STATS_PATH}\n基于统计数据生成 REPORT-*.md 到 {PROJECT_DIR}/reports/，不读原始JSON。\n完成后报告：文件路径 + 通过率 + 缺陷数 + 质量评估结论。"
 })
 ```
 

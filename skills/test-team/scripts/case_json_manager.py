@@ -228,12 +228,21 @@ def parse_req_range(req_str):
 
 def classify_scene(case):
     title = case.get("title", "")
-    case_type = case.get("type", "")
+    case_type = case.get("type", "").strip()
     note = case.get("note", "")
+    
+    # 1. 优先匹配type字段
+    if case_type in ["边界条件", "边界测试"]:
+        return "boundary"
+    if case_type in ["异常流程", "异常测试"]:
+        return "abnormal"
+    
+    # 2. 通过标题关键词判断
     if any(kw in title for kw in BOUNDARY_KEYWORDS) or "边界值" in note:
         return "boundary"
-    if case_type == "异常测试" or any(kw in title for kw in ABNORMAL_KEYWORDS):
+    if any(kw in title for kw in ABNORMAL_KEYWORDS):
         return "abnormal"
+    
     return "normal"
 
 

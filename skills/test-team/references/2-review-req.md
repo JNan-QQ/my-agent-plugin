@@ -147,7 +147,7 @@ Glob `**/REQ-*.md`（path: 工作目录），选最新。
 
 ### 步骤 4：生成评审报告
 
-保存到 `test-output/reviews/req-review-YYYYMMDD-HHMM.md`，格式：
+保存到 `{PROJECT_DIR}/reviews/req-review-YYYYMMDD-HHMM.md`，格式：
 
 ```markdown
 # 需求评审报告

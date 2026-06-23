@@ -27,7 +27,7 @@ TC003: 阻塞, 邮件服务未配置
 
 ### 步骤 3：生成执行记录
 
-保存到 `test-output/execution/EXEC-YYYYMMDD-HHMM.json`
+保存到 `{PROJECT_DIR}/execution/EXEC-YYYYMMDD-HHMM.json`
 
 ```bash
 python {SKILL_DIR}/scripts/exec_json_manager.py create --type exec --output {EXEC_PATH} --data /tmp/exec.json
@@ -38,7 +38,7 @@ python {SKILL_DIR}/scripts/exec_json_manager.py append --type exec --file {EXEC_
 
 ### 步骤 4：生成缺陷记录（如有）
 
-保存到 `test-output/execution/BUGS-YYYYMMDD-HHMM.json`
+保存到 `{PROJECT_DIR}/execution/BUGS-YYYYMMDD-HHMM.json`
 
 ```bash
 python {SKILL_DIR}/scripts/exec_json_manager.py create --type bug --output {BUGS_PATH} --data /tmp/bugs.json

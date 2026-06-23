@@ -63,7 +63,7 @@ python {SKILL_DIR}/scripts/case_json_manager.py read --file {TC_PATH} --start 0 
 3. 读取需求文档 `**/REQ-*.md`
 4. 调 analyze 获取覆盖度+质量+封驳判定：
 ```bash
-python {SKILL_DIR}/scripts/case_json_manager.py analyze --file {TC_PATH} --reqs F001-F054 --output test-output/.tmp/analysis.json
+python {SKILL_DIR}/scripts/case_json_manager.py analyze --file {TC_PATH} --reqs F001-F054 --output {PROJECT_DIR}/.tmp/analysis.json
 ```
 
 ### 步骤 2：覆盖度分析
@@ -94,7 +94,7 @@ python {SKILL_DIR}/scripts/case_json_manager.py analyze --file {TC_PATH} --reqs 
 
 ### 步骤 5：生成评审报告
 
-保存到 `test-output/reviews/case-review-YYYYMMDD-HHMM.md`，格式：
+保存到 `{PROJECT_DIR}/reviews/case-review-YYYYMMDD-HHMM.md`，格式：
 
 ```markdown
 # 用例评审报告

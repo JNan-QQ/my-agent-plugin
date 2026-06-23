@@ -201,7 +201,7 @@ SMART 原则，编号 F001/F002...，每条需求必须包含：
 
 ### 步骤 3：生成需求文档
 
-保存到 `test-output/requirements/REQ-YYYYMMDD-HHMM.md`，格式：
+保存到 `{PROJECT_DIR}/requirements/REQ-YYYYMMDD-HHMM.md`，格式：
 
 ```markdown
 # 需求分析文档

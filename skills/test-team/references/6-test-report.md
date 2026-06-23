@@ -36,7 +36,7 @@
 
 ### 步骤 5：生成报告
 
-保存到 `test-output/reports/REPORT-YYYYMMDD-HHMM.md`，格式：
+保存到 `{PROJECT_DIR}/reports/REPORT-YYYYMMDD-HHMM.md`，格式：
 
 ```markdown
 # 测试报告

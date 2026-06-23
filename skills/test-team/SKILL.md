@@ -166,7 +166,7 @@ test-output/{PROJECT_CODE}/
   "arguments": {
     "path": "<输入文件路径>.docx",
     "output_path": "{PROJECT_DIR}/docs/<文档名>/<文档名>.md",
-    "format": "both",
+    "format": "md",
     "extract_images": true
   }
 }

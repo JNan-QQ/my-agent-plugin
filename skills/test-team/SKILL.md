@@ -160,11 +160,16 @@ test-output/{PROJECT_CODE}/
 **Word文档处理流程**（使用 doc2md MCP）：
 
 调用 MCP 工具 `convert_file` 将 .docx 转换为 Markdown：
-```
-MCP_TOOL: convert_file
-参数:
-  - path: <输入文件路径>.docx
-  - format: md
+```json
+{
+  "name": "convert_file",
+  "arguments": {
+    "path": "<输入文件路径>.docx",
+    "output_path": "{PROJECT_DIR}/docs/<文档名>/<文档名>.md",
+    "format": "both",
+    "extract_images": true
+  }
+}
 ```
 
 转换完成后，读取生成的 `.md` 文件继续分析。

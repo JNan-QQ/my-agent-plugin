@@ -55,7 +55,7 @@
 
 ### 步骤 1：读取文件
 
-1. Glob 查找 `**/TC-*.json`（path: 工作目录），选最新
+1. Glob 查找 `**/TC-*.json`（path: {PROJECT_DIR}），选最新
 2. 分批读取（每次 15-20 个）：
 ```bash
 python {SKILL_DIR}/scripts/case_json_manager.py read --file {TC_PATH} --start 0 --end 20

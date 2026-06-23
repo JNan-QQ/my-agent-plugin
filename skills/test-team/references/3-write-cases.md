@@ -90,11 +90,11 @@
 
 ### 步骤 0：检测模式
 
-Glob `**/case-review-*.md`（path: 工作目录）。存在评审报告 → 询问用户选择模式。
+Glob `**/case-review-*.md`（path: {PROJECT_DIR}）。存在评审报告 → 询问用户选择模式。
 
 ### 步骤 1：读取需求
 
-Glob `**/REQ-*.md`（path: 工作目录），优先选已通过评审的需求文档。
+Glob `**/REQ-*.md`（path: {PROJECT_DIR}），优先选已通过评审的需求文档。
 
 增量模式额外读取：case-review-*.md（提取遗漏/问题/冗余）+ TC-*.json
 

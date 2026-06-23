@@ -5,7 +5,7 @@
 
 ### 步骤 1：读取用例
 
-Glob `**/TC-*.json`（path: 工作目录），选最新。分批读取：
+Glob `**/TC-*.json`（path: {PROJECT_DIR}），选最新。分批读取：
 ```bash
 python {SKILL_DIR}/scripts/case_json_manager.py read --file {TC_PATH} --start 0 --end 20
 ```

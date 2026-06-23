@@ -10,7 +10,7 @@
 
 ### 步骤 0：检测模式
 
-Glob `**/req-review-*.md`（path: 工作目录）。存在评审报告 → 询问用户选择模式。
+Glob `**/req-review-*.md`（path: {PROJECT_DIR}）。存在评审报告 → 询问用户选择模式。
 
 ### 步骤 1：接收输入与配置
 

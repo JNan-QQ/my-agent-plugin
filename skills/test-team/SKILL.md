@@ -179,6 +179,11 @@ MCP_TOOL: convert_file
 
 #### 1.5 执行需求分析
 
+**首先创建项目目录**：
+```bash
+mkdir -p {PROJECT_DIR}/requirements {PROJECT_DIR}/test-cases {PROJECT_DIR}/reviews {PROJECT_DIR}/execution {PROJECT_DIR}/reports {PROJECT_DIR}/.tmp
+```
+
 ```
 Agent({
   description: "执行阶段1：需求分析",

@@ -154,10 +154,12 @@ test-output/{PROJECT_CODE}/
 | 格式 | 处理方式 |
 |------|----------|
 | `.md` | 直接使用 |
-| `.docx` | 通过 doc2md MCP 服务转换为 Markdown |
+| `.docx` | **必须使用 doc2md MCP 服务**转换为 Markdown |
 | `.pdf` | 提示用户转换为Markdown或复制内容 |
 
-**Word文档处理流程**（使用 doc2md MCP）：
+**Word文档处理流程**（必须使用 doc2md MCP 服务）：
+
+> ⚠️ **强制要求**：.docx 文件必须通过 doc2md MCP 服务转换，禁止其他转换方式。
 
 调用 MCP 工具 `convert_file` 将 .docx 转换为 Markdown：
 ```json
@@ -165,7 +167,7 @@ test-output/{PROJECT_CODE}/
   "name": "convert_file",
   "arguments": {
     "path": "<输入文件路径>.docx",
-    "output_path": "{PROJECT_DIR}/docs/<文档名>/<文档名>.md",
+    "output_path": "{PROJECT_DIR}/<文档名>.md",
     "format": "md",
     "extract_images": true
   }

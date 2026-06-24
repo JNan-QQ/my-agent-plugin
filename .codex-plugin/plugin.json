@@ -1,24 +1,56 @@
 {
-  "name": "test-automation",
+  "repository": "https://github.com/nanjiang6/my-agent-skills",
+  "keywords": [
+    "test",
+    "testing",
+    "playwright",
+    "dify",
+    "workflow",
+    "automation",
+    "codex-plugin"
+  ],
   "version": "1.0.0",
-  "description": "AI驱动的测试工作流技能集合：测试团队6阶段工作流、Playwright自动化测试框架初始化、Dify工作流校验与修复",
   "author": {
     "name": "nanjiang6"
   },
-  "keywords": ["test", "testing", "playwright", "dify", "workflow", "automation"],
-  "skills": "./skills/",
-  "mcpServers": "./.mcp.json",
+  "homepage": "https://github.com/nanjiang6/my-agent-skills",
   "interface": {
+    "capabilities": [
+      "interactive",
+      "write"
+    ],
+    "defaultPrompt": [
+      "测试 {{target}} 功能",
+      "初始化 Playwright 测试框架",
+      "检查 Dify 工作流 {{path}}"
+    ],
+    "category": "Testing",
     "displayName": "Test Automation Skills",
     "shortDescription": "AI测试工作流：需求分析→用例编写→自动化测试→工作流校验",
     "longDescription": "包含三个测试相关技能：1) 测试团队6阶段工作流（需求分析→需求评审→用例编写→用例评审→执行记录→测试报告）；2) Playwright Python + pytest自动化测试框架初始化；3) Dify工作流yml静态校验与AI智能修复",
-    "developerName": "nanjiang6",
-    "category": "Testing",
-    "capabilities": ["Interactive", "Write"],
-    "defaultPrompt": [
-      "测试XX功能",
-      "初始化Playwright测试框架",
-      "检查这个Dify工作流"
-    ]
-  }
+    "developerName": "nanjiang6"
+  },
+  "mcpServers": {
+    "doc2md": {
+      "cwd": ".",
+      "platforms": {
+        "darwin": {
+          "command": "./mcp/doc2md-mcp-darwin"
+        },
+        "win32": {
+          "command": "./mcp/doc2md-mcp-win.exe"
+        },
+        "linux": {
+          "command": "./mcp/doc2md-mcp-linux"
+        }
+      },
+      "env": {
+        "DOC2MD_MCP": "1"
+      },
+      "args": []
+    }
+  },
+  "description": "AI驱动的测试工作流技能集合：测试团队6阶段工作流、Playwright自动化测试框架初始化、Dify工作流校验与修复",
+  "name": "test-automation",
+  "skills": "./skills/"
 }

@@ -35,19 +35,18 @@
       "cwd": ".",
       "platforms": {
         "darwin": {
-          "command": "./mcp/doc2md-mcp-darwin"
+          "command": "./mcp/doc2md-darwin"
         },
         "win32": {
-          "command": "./mcp/doc2md-mcp-win.exe"
+          "command": "./mcp/doc2md.exe"
         },
         "linux": {
-          "command": "./mcp/doc2md-mcp-linux"
+          "command": "./mcp/doc2md-linux"
         }
       },
       "env": {
-        "DOC2MD_MCP": "1"
       },
-      "args": []
+      "args": ["server"]
     }
   },
   "description": "AI驱动的测试工作流技能集合：测试团队6阶段工作流、Playwright自动化测试框架初始化、Dify工作流校验与修复",
